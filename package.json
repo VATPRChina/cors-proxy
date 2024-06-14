@@ -15,8 +15,8 @@
     "lint:tsc": "tsc --noEmit",
     "lint": "concurrently 'pnpm:lint:*' --group",
     "format": "prettier --ignore-unknown --write 'src/**/*'",
-    "start": "node --import dist/main.js",
-    "start:dev": "tsx watch --clear-screen=false ./src/main.ts"
+    "start": "node dist/main.js",
+    "start:dev": "tsx watch --clear-screen=false src/main.ts"
   },
   "keywords": [],
   "author": "VATPRC <webmaster@vatprc.net>",
