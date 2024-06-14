@@ -1,0 +1,40 @@
+{
+  "name": "vatprc-cors-proxy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/main.js",
+  "packageManager": "pnpm@9.2.0",
+  "scripts": {
+    "build": "concurrently 'pnpm:build:*' --group",
+    "build:ts": "tsc",
+    "build:tailwind": "tailwindcss -o public/style.css",
+    "dev": "pnpm start:dev",
+    "test": "c8 --all --src dist --reporter text-summary ava",
+    "test:watch": "ava --watch",
+    "lint:eslint": "eslint 'src/**/*.{ts,tsx}'",
+    "lint:prettier": "prettier --ignore-unknown --check 'src/**/*'",
+    "lint:tsc": "tsc --noEmit",
+    "lint": "concurrently 'pnpm:lint:*' --group",
+    "format": "prettier --ignore-unknown --write 'src/**/*'",
+    "start": "node --import dist/main.js",
+    "start:dev": "tsx watch --clear-screen=false ./src/main.ts"
+  },
+  "keywords": [],
+  "author": "VATPRC <webmaster@vatprc.net>",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@eslint/js": "^9.4.0",
+    "@types/eslint-config-prettier": "^6.11.3",
+    "@types/eslint__js": "^8.42.3",
+    "@types/node": "^20.14.2",
+    "acorn": "^8.12.0",
+    "concurrently": "^8.2.2",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.3.2",
+    "tsx": "^4.15.4",
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^7.13.0"
+  }
+}
