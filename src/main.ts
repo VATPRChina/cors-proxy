@@ -1,5 +1,15 @@
 import { createServer } from "node:http";
 
+if (!process.env["ALLOWED_TARGET_SUFFIX"]) {
+  process.env["ALLOWED_TARGET_SUFFIX"] = "vatsim.net";
+}
+const allowedTargetSuffix = process.env["ALLOWED_TARGET_SUFFIX"].split(",");
+
+if (!process.env["ALLOWED_ORIGIN_SUFFIX"]) {
+  process.env["ALLOWED_ORIGIN_SUFFIX"] = "vatprc.net";
+}
+const allowedOriginSuffix = process.env["ALLOWED_ORIGIN_SUFFIX"].split(",");
+
 const server = createServer((req, res) => {
   try {
     const reqUrl = new URL(`http://localhost/${req.url ?? ""}`);
@@ -21,7 +31,9 @@ const server = createServer((req, res) => {
       return;
     }
 
-    if (!target.hostname.endsWith("vatsim.net")) {
+    if (
+      !allowedTargetSuffix.some((suffix) => target.hostname.endsWith(suffix))
+    ) {
       res.writeHead(403, { "Content-Type": "text/plain" });
       res.end("Forbidden target " + target.hostname);
       return;
@@ -29,12 +41,14 @@ const server = createServer((req, res) => {
 
     if (
       !req.headers.origin ||
-      !new URL(req.headers.origin).hostname.endsWith("vatprc.net")
+      !allowedOriginSuffix.some((suffix) =>
+        new URL(req.headers.origin!).hostname.endsWith(suffix)
+      )
     ) {
       res.writeHead(400, { "Content-Type": "text/plain" });
       res.end(
         "Origin header is required, and must be from vatprc.net: " +
-          req.headers.origin,
+          req.headers.origin
       );
       return;
     }
@@ -77,11 +91,11 @@ const server = createServer((req, res) => {
             "access-control-max-age",
             "access-control-request-method",
             "access-control-request-headers",
-          ].includes(key.toLowerCase()),
+          ].includes(key.toLowerCase())
         );
         if (
           resHeaders.find(
-            ([key]) => key.toLowerCase() === "access-control-allow-origin",
+            ([key]) => key.toLowerCase() === "access-control-allow-origin"
           ) === undefined
         ) {
           resHeaders.push(["Access-Control-Allow-Origin", req.headers.origin!]);
